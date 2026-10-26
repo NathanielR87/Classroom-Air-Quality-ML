@@ -1,0 +1,15 @@
+# Ignore EVERYTHING in this folder by default...
+/*
+
+# ...except these:
+!/.gitignore
+!/AGENTS.md
+!/src/
+
+# Even inside src/, never upload data or junk
+*.csv
+*.xlsx
+.DS_Store
+__pycache__/
+.ipynb_checkpoints/
+!/README.md
