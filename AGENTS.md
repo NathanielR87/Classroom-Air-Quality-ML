@@ -27,6 +27,10 @@ Muse Code reads this file as project rules when it runs in this directory.
 - Keep functions small and commented
 - Don't install new packages without asking me first
 - Don't commit data files to git
+- All new code goes in src/. Nothing outside src/ gets committed to git.
+- Raw data and my original code are NOT in git. Always read them by full path:
+  ~/Desktop/AdamData/Batch1/ and ~/Desktop/AdamData/Nates_copy_CDC_code/
+- Never upload or commit CSV or data files.
 
 ## Common Commands
 - Not set up yet; fill in once we know how the scripts run
