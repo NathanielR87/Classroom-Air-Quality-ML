@@ -1,0 +1,7 @@
+school,off_date,on_date,role
+School_01,2025-12-11,2025-12-12,train
+School_03,2026-02-02,2026-02-03,test
+School_04,2026-02-03,2026-02-02,train
+School_05,2025-12-15,2025-12-16,test
+School_06,2025-12-02,2025-12-03,train
+School_07,2025-12-04,2025-12-05,train

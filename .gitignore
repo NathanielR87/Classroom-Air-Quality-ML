@@ -4,6 +4,7 @@
 # ...except these:
 !/.gitignore
 !/AGENTS.md
+!/HACKATHON_NEW.md
 !/src/
 
 # Even inside src/, never upload data or junk
@@ -12,4 +13,7 @@
 .DS_Store
 __pycache__/
 .ipynb_checkpoints/
+# ...except small hand-written config tables (no measurements in these)
+!/src/trial_labels.csv
+!/src/rating_bands.csv
 !/README.md
