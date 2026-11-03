@@ -6,7 +6,7 @@ P(PAC on): green >= 0.6, red <= 0.4, yellow too close to call, grey no
 data. Hover a cell for the numbers. "Month call" averages P(on) over
 the month. Trial days (known OFF/ON) get an outlined column.
 
-Differences from exampleGraph.png, stated plainly: there is no survey
+Differences from docs/reference/exampleGraph.png, stated plainly: there is no survey
 data in this workspace, so there are no Survey/Check columns — only
 the model side. Real school names never appear; titles use School_XX.
 
@@ -113,20 +113,23 @@ def school_grid(school: str, month: str, days: pd.DataFrame,
             outline = (f"outline:3px solid {border[outlines[day]]};"
                        f"outline-offset:-3px;" if day in outlines else "")
             if row is None or prob is None or np.isnan(prob):
-                tip = f"{room} · {month}-{day:02d} · no IAQ+ACH data"
+                tip = (f"{room.replace('_', ' ')} · {month}-{day:02d} "
+                       f"· no IAQ+ACH data")
             else:
-                tip = (f"{room} · {row.date} · P(ON)={prob:.2f} · "
+                tip = (f"{room.replace('_', ' ')} · {row.date} · "
+                       f"P(ON)={prob:.2f} · "
                        f"PM2.5 tot {row.Cumulative_Indoor_PM2_5:.0f} · "
                        f"max ACH {row.daily_max_ach:.2f}")
                 month_probs[room].append(prob)
             if day in outlines:
                 tip += f" · trial day: PAC {outlines[day]}"
             cells.append(f'<td title="{tip}" style="background:{colour};'
-                         f'width:22px;height:22px;{outline}"></td>')
+                         f'width:14px;height:14px;{outline}"></td>')
         colour, call = month_call(month_probs[room])
         rows_html.append(
-            f"<tr><td><b>{room}</b></td>{''.join(cells)}"
-            f'<td style="background:{colour};padding:2px 10px;white-space:nowrap">'
+            f"<tr style='font-size:12px'><td><b>{room.replace('_', ' ')}"
+            f"</b></td>{''.join(cells)}"
+            f'<td style="background:{colour};padding:1px 6px;white-space:nowrap">'
             f"{call}</td></tr>")
 
     outlined = ", ".join(f"{month}-{d:02d} {label}"
@@ -138,9 +141,9 @@ def school_grid(school: str, month: str, days: pd.DataFrame,
                 + " · no survey data in this workspace, so no Survey/Check columns")
     return f"""<!DOCTYPE html>
 <html><head><meta charset="utf-8">
-<title>{school} — {month_name} PAC grid</title></head>
+<title>{school.replace('_', ' ')} — {month_name} PAC grid</title></head>
 <body style="font-family:sans-serif">
-<h2>{school} — {month_name} PAC grid</h2>
+<h2>{school.replace('_', ' ')} — {month_name} PAC grid</h2>
 <p>{subtitle}. Hover a cell for numbers.</p>
 <p><span style="background:#3cb371;padding:2px 8px">Predicted ON (P&ge;0.6)</span>
 <span style="background:#e06666;padding:2px 8px">Predicted OFF (P&le;0.4)</span>
@@ -148,7 +151,7 @@ def school_grid(school: str, month: str, days: pd.DataFrame,
 <span style="background:#d3d3d3;padding:2px 8px">No IAQ+ACH data</span>
 <span style="border:3px solid #1565c0;padding:0 6px">Trial day: PAC OFF</span>
 <span style="border:3px solid #6a1b9a;padding:0 6px">Trial day: PAC ON</span></p>
-<table cellspacing="1" cellpadding="0">
+<table cellspacing="1" cellpadding="0" style="font-size:12px">
 <tr><th>Room</th>{''.join(head)}<th>Month call</th></tr>
 {''.join(rows_html)}
 </table>

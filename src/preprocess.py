@@ -253,11 +253,14 @@ def daily_summary(minute: pd.DataFrame, school: str, room: str, sensor: str) -> 
             "date": date, "school": school, "classroom": room, "sensor_id": sensor,
             "Indoor_CO2_max": day["co2"].max(),
             "Cumulative_Indoor_CO2": day["co2"].sum(min_count=1),
+            "Indoor_CO2_mean": day["co2"].mean(),
             "Indoor_PM2_5_max": day["pm25"].max(),
             "Cumulative_Indoor_PM2_5": day["pm25"].sum(min_count=1),
+            "Indoor_PM2_5_mean": day["pm25"].mean(),
             "Temp_avg": day["temp"].mean(),
             "RH_avg": day["rh"].mean(),
             "VOC_max": day["voc"].max(),
+            "VOC_mean": day["voc"].mean(),
             "minutes_used": int(day["pm25"].notna().sum()),
         })
     return pd.DataFrame(rows)

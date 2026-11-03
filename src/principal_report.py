@@ -52,8 +52,11 @@ def school_month_context(processed: Path, school: str, month: str) -> str:
                             f"{row.metric}_advice"].mode()
         if not poor_tip.empty and poor_tip.iloc[0]:
             lines.append(f"  Top {row.label} recommendation: {poor_tip.iloc[0]}")
-    kruskal = pd.read_csv(processed / "figures" / "ach_boxplots"
-                          / "kruskal_results.csv")
+    try:
+        kruskal = pd.read_csv(processed / "figures" / "ach_boxplots"
+                              / "kruskal_results.csv")
+    except OSError:  # fresh engineer runs have no trial comparison yet
+        kruskal = pd.DataFrame(columns=["school"])
     hit = kruskal[kruskal["school"] == school]
     if not hit.empty:
         row = hit.iloc[0]
@@ -61,7 +64,10 @@ def school_month_context(processed: Path, school: str, month: str) -> str:
                    if not row["significant"] else "a significant difference")
         lines.append(f"Ventilation check (Kruskal-Wallis on trial days): "
                      f"H={row['H']:.2f}, p={row['p']:.3f} — {verdict}.")
-    report = (processed / "pac_model_report.txt").read_text()
+    try:
+        report = (processed / "pac_model_report.txt").read_text()
+    except OSError:  # fresh engineer runs have no model report yet
+        report = ""
     supervised = [line for line in report.splitlines()
                   if line.startswith("Model B (supervised)   test:")]
     if supervised:

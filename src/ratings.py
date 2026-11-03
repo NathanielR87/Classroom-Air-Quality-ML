@@ -44,12 +44,20 @@ def rate_value(band, value: float) -> tuple[str, str]:
             else band.advice_high)
 
 
-def rate_frame(merged: pd.DataFrame, bands: pd.DataFrame) -> pd.DataFrame:
-    """Add {metric}_rating + {metric}_advice columns plus a worst-rating.
+def rate_frame(merged: pd.DataFrame, bands: pd.DataFrame,
+               view: str = "both") -> pd.DataFrame:
+    """Add {metric}_rating + {metric}_advice columns plus an overall rating.
 
-    worst_rating is Poor if any metric is Poor, else Fair if any is Fair,
-    else Good ("no data" only when every metric is missing).
+    view picks which rows of the bands table apply: "peaks" (peak + all),
+    "typical" (typical + all), or "both" (everything). The overall rating
+    counts Poor metrics: 3+ Poor -> Poor (red), 2 -> High (orange),
+    1 -> Watch (yellow), none Poor but some Fair -> Fair (yellow),
+    all Good -> Good (green), all missing -> "no data".
     """
+    if view == "peaks":
+        bands = bands[bands["view"].isin(["peak", "all"])]
+    elif view == "typical":
+        bands = bands[bands["view"].isin(["typical", "all"])]
     rated = merged.copy()
     rating_cols = []
     for row in bands.itertuples():
@@ -62,11 +70,23 @@ def rate_frame(merged: pd.DataFrame, bands: pd.DataFrame) -> pd.DataFrame:
     for column in rated.columns:
         if column.endswith("_advice"):
             rated[column] = rated[column].fillna("")
-    order = {"Poor": 0, "Fair": 1, "Good": 2, "no data": 3}
-    worst = rated[rating_cols].apply(
-        lambda day: min(day, key=lambda rating: order[rating]), axis=1)
-    rated["worst_rating"] = worst.where(
-        (rated[rating_cols] != "no data").any(axis=1), "no data")
+    def overall(day) -> str:
+        """Overall from Poor-metric count (rule in rate_frame docstring)."""
+        vals = [value for value in day if value != "no data"]
+        if not vals:
+            return "no data"
+        poor = sum(value == "Poor" for value in vals)
+        if poor >= 3:
+            return "Poor"
+        if poor == 2:
+            return "High"
+        if poor == 1:
+            return "Watch"
+        if any(value == "Fair" for value in vals):
+            return "Fair"
+        return "Good"
+
+    rated["worst_rating"] = rated[rating_cols].apply(overall, axis=1)
     rated["n_poor"] = (rated[rating_cols] == "Poor").sum(axis=1)
     return rated
 

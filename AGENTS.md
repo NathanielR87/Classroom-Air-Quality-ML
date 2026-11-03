@@ -10,11 +10,11 @@ Muse Code reads this file as project rules when it runs in this directory.
 ## Folders
 - Batch1/ — RAW school air quality data, one subfolder per school. READ ONLY. Local copy has 7 schools (anonymized School_01–School_07; the private folder-name mapping lives in processed/_private_do_not_share/school_key.csv and is never committed), 85 sensor/room folders, ~11k CSVs (~28 GB).
 - Nates_copy_CDC_code/ — my existing preprocessing + prediction code. This is the starting point do not change and just make copy if you are going to make any changes.
-- PAC_Pipeline_Walkthrough.pdf — slides explaining what each script does and the order they run in. Read this first. NOTE: the PDF is at ~/Desktop/AdamData/PAC_Pipeline_Walkthrough.pdf, not inside Nates_copy_CDC_code/.
+- docs/reference/PAC_Pipeline_Walkthrough.pdf — slides explaining what each script does and the order they run in. Read this first. NOTE: the PDF is at ~/Desktop/AdamData/docs/reference/PAC_Pipeline_Walkthrough.pdf, not inside Nates_copy_CDC_code/.
 - processed/ — cleaned data output goes here (create it if needed; does not exist yet)
 - src/ — new or refactored code goes here (exists; currently only src/README.md)
 
-## Pipeline order (from README.ipynb + PAC_Pipeline_Walkthrough.pdf)
+## Pipeline order (from README.ipynb + docs/reference/PAC_Pipeline_Walkthrough.pdf)
 1. IAQ daily summaries (R): Nates_copy_CDC_code/IAQ_meta_processing_sep25.R (parallel variant: IAQ_meta_processing_sep25_parra.R)
 2. ACH step A — monthly per-classroom CO2+PM files (Python): rawsensor_preprocess_mschools_batch.ipynb (older: rawsensor_preprocess_mschools.ipynb; backfill variant: rawsensor_preprocess_mschools_batch_backfill.ipynb)
 3. ACH step B — CO2-decay ACH per classroom (Python): loadbalancer_workflow/process_data.py via SLURM (local/notebook twins: ACH_mschools_monthly.ipynb, ACH_mschools_monthly_rerun.ipynb, ACH_safeguards.ipynb, ACH_mschools_test_raw.py)
