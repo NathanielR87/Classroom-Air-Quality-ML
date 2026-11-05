@@ -41,6 +41,21 @@ claimed as hackathon work.
   for School_01 2025-12 from the rated tables; the trial-verdict and
   honesty-check lines degrade gracefully for fresh single-school
   outputs that lack them).
+- `vr_classroom.html` — single-file three.js classroom (9 × 7.5 × 3.2 m)
+  with exhaled-CO2 particles from School_06's real days: Room M1 at
+  1,275 ppm (2025-11-05) vs Room 105 at 386 ppm (2024-12-30), one dot
+  ≈ 1 ppm with the average dot gap shown; drag-look, WASD movement.
+  Static checks + JS parse verified (no browser on this machine).
+  Lime-green dots; gentle size/glow scaling with ppm on top of the
+  count difference. The dashboard's VR tab embeds it (Streamlit
+  serves static .html as text/plain, so a link showed raw markup);
+  click into the 3D view once so WASD/arrows move you, not the page.
+- `sam_rooms.py` — SAM 3.1 room finder (Meta Model API, model
+  `sam-3.1`, Responses API per Meta's cookbook + wire protocol):
+  segments "room" boxes on a floor plan, writes suggested dot
+  fractions (`processed/sam_room_dots.csv`). Box parser verified
+  against the published protocol example; dry-run verified on the
+  School_06 plan; live call pending the user's key.
 - Dashboard "Engineer run": sidebar runs `preprocess.py` on a raw
   folder into `processed/runs/<name>` (months/school filters, log
   tail, auto-switch), then a "Write principal letter" button calls

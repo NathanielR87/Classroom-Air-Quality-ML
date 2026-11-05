@@ -32,11 +32,24 @@ is new versus the pre-existing starting point.
    pick a weekday on the calendar, see every metric's rating and the ACH
    decay chart behind it. An "Engineer run" sidebar section processes a
    new school's raw folder in the browser and populates everything.
-5. **Principal letter** (`src/principal_report.py`). A district engineer
+5. **VR classroom** (`src/vr_classroom.html`). A single web page: walk
+   inside a typical classroom and see the air. CO2 particles use the
+   school's real numbers (one dot ≈ 1 ppm of the school-day mean):
+   Room M1 at 1,275 ppm (2025-11-05) versus Room 105 at 386 ppm
+   (2024-12-30). Drag to look, WASD/arrows to move. Open the file in a
+   browser; no server needed. The 3D library is inlined in the page,
+   so it works fully offline — as does the whole dashboard demo. Only
+   writing a NEW principal letter or running SAM needs the internet.
+6. **Principal letter** (`src/principal_report.py`). A district engineer
    presses one button and Muse Spark, via the Meta Model API, writes a
    plain-language letter from that month's rated tables. No key is typed
    into the page; it is read from a local `.env` file and never displayed,
    saved, or committed.
+7. **Room finder** (`src/sam_rooms.py`). SAM 3.1, via the same Meta Model
+   API, segments "room" boxes on a new school's floor plan and suggests
+   dashboard dot positions (box centers as image fractions), so a new
+   school's map needs checking, not hand-measuring. Dry-run verified;
+   live call uses the same key as the letter.
 
 ## Quickstart
 
@@ -53,6 +66,17 @@ streamlit run src/dashboard.py   # then open the local URL in a browser
 School names are anonymized (`School_01`...) in every output; a private
 mapping file stays off Git by default. This public repo contains no raw
 sensor data, no student data, and no real school names.
+
+## No powerful computer?
+
+The Meta Model API does not run your code; it returns model output
+(letters, masks). Processing still needs Python somewhere — but not
+much of it: the full pipeline above ran end-to-end on a MacBook Air.
+For a click-only demo, deploy this repo on Streamlit Community Cloud
+(share.streamlit.io → New app → this repo → `src/dashboard.py`).
+Caveat: the cloud cannot see folders on your machine, so the hosted
+copy displays data you give it; the local dashboard above remains
+the way to process a folder of raw sensor CSVs.
 
 ## Layout
 

@@ -481,6 +481,30 @@ def decay_expander(processed: Path, batch1: Path, day: pd.Series) -> None:
             use_container_width=True)
 
 
+def show_vr() -> None:
+    """Embed the VR classroom page (School 06 high vs low CO2 days).
+
+    Embedded, not linked: Streamlit serves static .html files as
+    text/plain (see SAFE_APP_STATIC_FILE_EXTENSIONS in its
+    app_static_file_handler), so Safari showed the raw markup. An
+    embedded frame renders everywhere. Click into the 3D view once
+    first: that hands the keyboard to the frame, so WASD/arrows
+    move you instead of scrolling the dashboard.
+    """
+    import streamlit.components.v1 as components
+
+    st.subheader("VR classroom — see the air (School 06)")
+    st.caption("One dot ~ 1 ppm of the school-day mean CO2: "
+               "Room M1 at 1,275 ppm (2025-11-05) versus Room 105 at "
+               "386 ppm (2024-12-30). Click inside the 3D view once, "
+               "then drag to look and W A S D / arrows to walk. "
+               "Fully offline: the 3D library is inlined in the page. "
+               "Same page standalone: double-click "
+               "src/vr_classroom.html.")
+    page = Path(__file__).resolve().parent / "vr_classroom.html"
+    components.html(page.read_text(), height=760, scrolling=False)
+
+
 def report_summary(report: str) -> None:
     """The model report condensed to its verdict lines; full text folded."""
     if not report:
@@ -619,8 +643,12 @@ def main() -> None:
                 "then enter that folder above.")
         return
 
-    page = st.sidebar.radio("Page", ["Classroom", "All schools ON/OFF"],
+    page = st.sidebar.radio("Page", ["Classroom", "All schools ON/OFF",
+                                       "VR classroom"],
                               key="page")
+    if page == "VR classroom":
+        show_vr()
+        return
     view = st.sidebar.radio("Values", ["Peaks", "Typical", "Both"],
                             key="view_toggle").lower()
     st.sidebar.caption("Typical = medians and means, a normal school day. "
